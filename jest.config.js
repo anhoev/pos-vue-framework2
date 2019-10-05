@@ -1,30 +1,51 @@
-process.env.VUE_CLI_BABEL_TARGET_NODE = true;
-process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true;
-
 module.exports = {
-  // collectCoverage: true,
-  // collectCoverageFrom: [
-  //   '**/*.{js, vue}',
-  //   '!**/node_modules/**'
-  // ],
+  verbose: false,
+  testEnvironment: 'jest-environment-jsdom-fourteen',
   roots: [
-    '<rootDir>/src'
+    '<rootDir>/src',
+  ],
+  setupFilesAfterEnv: [
+    '<rootDir>/test/index.ts',
   ],
   moduleFileExtensions: [
-    'js', 'json', 'vue'
+    'ts',
+    'js',
   ],
   moduleDirectories: [
-    'node_modules'
+    'node_modules',
   ],
   moduleNameMapper: {
-    '^@/(.*)$': "<rootDir>/src/$1"
+    '^@/test$': '<rootDir>/test/index.js',
+    '^@/test/(.*)$': '<rootDir>/test/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|sass|scss)$': 'identity-obj-proxy',
   },
-  testMatch: [
-    '**/__tests__/*.test.js'
-  ],
   transform: {
-    '^.*\\.vue$': "<rootDir>/node_modules/vue-jest",
-    '^.+\\.js$': "<rootDir>/node_modules/babel-jest"
+    '\\.(styl)$': 'jest-css-modules',
+    '\\.(sass|scss)$': 'jest-css-modules',
+    '.*\\.(j|t)s$': 'ts-jest',
   },
-  transformIgnorePatterns: ['<rootDir>/node_modules']
+  collectCoverageFrom: [
+    'src/**/*.{js,ts,tsx}',
+    '!**/*.d.ts',
+  ],
+  transformIgnorePatterns: [
+    'node_modules/(?!vue-router)',
+  ],
+  snapshotSerializers: [
+    'jest-serializer-html',
+  ],
+  testMatch: [
+    // Default
+    '**/test/**/*.js',
+    '**/__tests__/**/*.spec.js',
+    '**/__tests__/**/*.spec.ts',
+  ],
+  globals: {
+    'ts-jest': {
+      babelConfig: true,
+      tsConfig: '<rootDir>/tsconfig.test.json',
+      diagnostics: false,
+    },
+  },
 }
